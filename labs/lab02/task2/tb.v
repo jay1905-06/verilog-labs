@@ -1,11 +1,20 @@
 // tb.v
-// Starter testbench template -- YOU complete this file.
+// Testbench for Task 2 -- Parameterized ROM Lookup Table (lut)
 
 module tb;
 
-  // TODO: declare the inputs and outputs
+  // Declare the inputs and outputs
+  reg  [2:0] t_sel;
+  wire [7:0] t_dout;
 
-  // TODO: instantiate DUT here
+  // Instantiate DUT here with parameter override (WIDTH=8, DEPTH=8)
+  lut #(
+    .WIDTH(8),
+    .DEPTH(8)
+  ) DUT (
+    .sel  (t_sel),
+    .dout (t_dout)
+  );
 
   // Waveform dump configuration (DO NOT CHANGE)
   string vcd_file;
@@ -16,12 +25,19 @@ module tb;
     end
   end
 
+  integer i;
   initial begin
-    // TODO: apply different input combinations
-
+    // Apply input combinations across all addresses 0 to DEPTH-1
+    for (i = 0; i < 8; i = i + 1) begin
+      t_sel = i;
+      #5;
+    end
+    #5;
+    $display("Simulation complete: Task 2 finished");
+    $finish;
   end
 
   initial
-    $monitor($time, " I0=%b I1=%b S=%b | Y=%b", t_i0, t_i1, t_s, t_y); // change as required
+    $monitor($time, " sel=%0d | dout=%0d", t_sel, t_dout);
 
 endmodule
